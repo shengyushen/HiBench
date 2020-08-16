@@ -186,13 +186,14 @@ function run_spark_job() {
     LIB_JARS=
     while (($#)); do
       if [ "$1" = "--jars" ]; then
+        # SSY second arg is jar path
         LIB_JARS="--jars $2"
         shift 2
         continue
       fi
       break
     done
-
+    # SSY first arg is class name
     CLS=$1
     shift
 

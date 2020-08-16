@@ -27,6 +27,7 @@ rmr_hdfs $OUTPUT_HDFS || true
 
 SIZE=`dir_size $INPUT_HDFS`
 START_TIME=`timestamp`
+# SSY ./sparkbench/micro/src/main/scala/com/intel/sparkbench/micro/ScalaWordCount.scala
 run_spark_job com.intel.hibench.sparkbench.micro.ScalaWordCount $INPUT_HDFS $OUTPUT_HDFS
 END_TIME=`timestamp`
 

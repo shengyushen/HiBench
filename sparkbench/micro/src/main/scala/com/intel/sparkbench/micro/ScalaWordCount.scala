@@ -35,7 +35,10 @@ object ScalaWordCount{
     val sc = new SparkContext(sparkConf)
 
     val io = new IOCommon(sc)
+    // SSY data is a RDD returned from ../spark/core/src/main/scala/org/apache/spark/SparkContext.scala
     val data = io.load[String](args(0))
+    // SSY ../spark/core/src/main/scala/org/apache/spark/rdd/RDD.scala
+    // it seems that the RDD is the center of the spark running mechanism that synchronize multiple machine
     val counts = data.flatMap(line => line.split(" "))
                      .map(word => (word, 1))
                      .reduceByKey(_ + _)

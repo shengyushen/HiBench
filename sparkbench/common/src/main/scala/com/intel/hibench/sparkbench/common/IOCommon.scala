@@ -37,6 +37,8 @@ class IOCommon(val sc:SparkContext) {
      val input_format = force_format.getOrElse(
        IOCommon.getProperty("sparkbench.inputformat").getOrElse("Text"))
 
+     // SSY ../spark/core/src/main/scala/org/apache/spark/SparkContext.scala
+     // return RDD 
      input_format match {
        case "Text" =>
          sc.textFile(filename)
