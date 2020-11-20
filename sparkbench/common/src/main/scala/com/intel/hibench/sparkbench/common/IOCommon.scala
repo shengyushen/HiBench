@@ -41,7 +41,7 @@ class IOCommon(val sc:SparkContext) {
      // return RDD 
      input_format match {
        case "Text" =>
-         sc.textFile(filename)
+         sc.textFile(filename) // SSY unspecified parallel number may only use 2 cores , it is NOT the problem of spark, but intel's hibench
 
        case "Sequence" =>
          sc.sequenceFile[NullWritable, Text](filename).map(_._2.toString)
@@ -49,7 +49,7 @@ class IOCommon(val sc:SparkContext) {
        case _ => throw new UnsupportedOperationException(s"Unknown inpout format: $input_format")
      }
    }
-
+		// SSY the real save
    def save(filename:String, data:RDD[_], prefix:String) = {
      val output_format = IOCommon.getProperty(prefix).getOrElse("Text")
      val output_format_codec =
@@ -57,6 +57,8 @@ class IOCommon(val sc:SparkContext) {
 
      output_format match {
        case "Text" =>
+					// SSY ../spark/core/src/main/scala/org/apache/spark/rdd/RDD.scala
+					// SSY this is action
          if (output_format_codec.isEmpty)  data.saveAsTextFile(filename)
          else data.saveAsTextFile(filename, output_format_codec.get)
 
@@ -76,7 +78,7 @@ class IOCommon(val sc:SparkContext) {
        case _ => throw new UnsupportedOperationException(s"Unknown output format: $output_format")
      }
    }
-
+		// SSY wrap the real save around
    def save(filename:String, data:RDD[_]):Unit = save(filename, data, "sparkbench.outputformat")
 
    private def loadClassByName[T](name:Option[String]) = {
